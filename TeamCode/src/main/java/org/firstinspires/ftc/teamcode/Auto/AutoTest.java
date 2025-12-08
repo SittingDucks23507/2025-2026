@@ -17,8 +17,8 @@ public class AutoTest extends LinearOpMode {
         Auto.backLeft = hardwareMap.get(DcMotor.class, "back_left");
         Auto.backRight = hardwareMap.get(DcMotor.class, "back_right");
 
-        Auto.frontRight.setDirection(REVERSE);
-        Auto.backRight.setDirection(REVERSE);
+        Auto.frontLeft.setDirection(REVERSE);
+        Auto.backLeft.setDirection(REVERSE);
         Auto.lop = this;
         waitForStart();
         Auto.movetime(3, Auto.FORWARD);

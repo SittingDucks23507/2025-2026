@@ -116,7 +116,7 @@ public class TeleOp extends OpMode {
         backLeft.setPower((lsY - lsX + rsX)   * speed);
         backRight.setPower((lsY + lsX - rsX)  * speed);
         // 28 ticks per revolution
-        telemetry.addData("spinny tps", (theCoolerSpinny.getVelocity()));
+        telemetry.addData("spinny tps", theCoolerSpinny.getVelocity());
         telemetry.update();
     }
 }
