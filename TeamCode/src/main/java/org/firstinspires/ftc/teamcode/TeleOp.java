@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Config;
@@ -58,6 +59,7 @@ public class TeleOp extends OpMode {
     DcMotor spinny;
     DcMotorEx theCoolerSpinny;
     CRServo left_assist, right_assist;
+    LED red, green;
     ElapsedTime assist_timer = new ElapsedTime();
     @Override
     public void init() {
@@ -67,6 +69,8 @@ public class TeleOp extends OpMode {
         backRight = hardwareMap.get(DcMotor.class, "back_right");
         spinny = hardwareMap.get(DcMotor.class, "spinny");
         theCoolerSpinny = (DcMotorEx)spinny;
+        red = hardwareMap.get(LED.class, "red");
+        green = hardwareMap.get(LED.class, "green");
 
         left_assist = hardwareMap.get(CRServo.class, "left_assist");
         right_assist = hardwareMap.get(CRServo.class, "right_assist");
@@ -87,21 +91,21 @@ public class TeleOp extends OpMode {
         double lsY, lsX, rsX;
         float speed = 1f;
         float assist_power;
-        spinny.setPower(.96*Config.spinny_speed);
+        boolean atspeed = (Math.abs(theCoolerSpinny.getVelocity()) >= 1760);
+        spinny.setPower(0.94*Config.spinny_speed);
 
         if (gamepad1.right_trigger > 0.1) {
             speed = 0.25f;
         }
 
-        /* if (gamepad1.left_bumper) {
-            spinny.setPower(Config.spinny_speed);
-        } */
+        red.enable(!atspeed);
+        green.enable(atspeed);
 
         if (gamepad1.rightBumperWasPressed()) {
             assist_timer.reset();
         }
         if (assist_timer.seconds() < Config.secs) {
-            assist_power = 0.3f;
+            assist_power = 0.25f;
         } else {
             assist_power = 0.0f;
         }

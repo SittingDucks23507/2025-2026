@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Config;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Config;
 public class BasicAuto extends LinearOpMode {
     DcMotor spinny;
     CRServo left_assist, right_assist;
+    LED red, green;
     ElapsedTime finger = new ElapsedTime();
     @Override
     public void runOpMode() {
@@ -36,6 +38,9 @@ public class BasicAuto extends LinearOpMode {
 
         left_assist = hardwareMap.get(CRServo.class, "left_assist");
         right_assist = hardwareMap.get(CRServo.class, "right_assist");
+        red = hardwareMap.get(LED.class, "red");
+        green = hardwareMap.get(LED.class, "green");
+
         spinny.setDirection(REVERSE);
         right_assist.setDirection(REVERSE);
         Auto.lop = this;
@@ -54,8 +59,12 @@ public class BasicAuto extends LinearOpMode {
             // TODO: move 0.3f to Config.java
             left_assist.setPower(0.3f);
             right_assist.setPower(0.3f);
+            green.off();
+            red.on();
             target += Config.secs * 1.3f;
             while (finger.seconds() < target) {
+                red.off();
+                green.on();
                 telemetry.addData("assist time", finger.seconds());
                 telemetry.update();
             }
