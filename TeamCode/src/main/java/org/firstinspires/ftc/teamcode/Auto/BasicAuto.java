@@ -47,7 +47,7 @@ public class BasicAuto extends LinearOpMode {
         waitForStart();
         finger.reset();
         spinny.setPower(Config.spinny_speed *.9);
-        Auto.movetime(1, Auto.DOWN);
+        Auto.movetime(1, Auto.BACKWARD);
         target += 3.0f;
         while (finger.seconds() < target) {
             telemetry.addData("spinny is spinning", finger.seconds());

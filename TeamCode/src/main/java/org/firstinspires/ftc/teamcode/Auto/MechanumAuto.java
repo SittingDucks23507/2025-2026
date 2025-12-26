@@ -14,7 +14,7 @@ public class MechanumAuto {
     public final int[][] LEFT    = { {-1, 1},
             {1, -1} };
 
-    public final int[][] DOWN    = dtoim(mulsm(FORWARD, -1));
+    public final int[][] BACKWARD    = dtoim(mulsm(FORWARD, -1));
     public final int[][] RIGHT   = dtoim(mulsm(LEFT, -1));
 
     // define motors
@@ -50,7 +50,7 @@ public class MechanumAuto {
     }
 
     // Runs motors at SPEED power for ‘time’ seconds in ‘direction’
-    // Directions as defined above ‘FORWARD’ ‘DOWN’ ‘LEFT’ ‘RIGHT’
+    // Directions as defined above ‘FORWARD’ ‘BACKWARD’ ‘LEFT’ ‘RIGHT’
     public void movetime(float time, int[][] direction) {
         double[][] movevec = mulsm(direction, SPEED);
 
