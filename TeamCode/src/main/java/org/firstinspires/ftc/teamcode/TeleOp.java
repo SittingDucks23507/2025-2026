@@ -56,11 +56,12 @@ import org.firstinspires.ftc.teamcode.Config;
 public class TeleOp extends OpMode {
     // This declares the four motors needed
     DcMotor frontLeft, frontRight, backLeft, backRight;
-    DcMotor spinny;
+    DcMotor spinny, feeder;
     DcMotorEx theCoolerSpinny;
     CRServo left_assist, right_assist;
     LED red, green;
     ElapsedTime assist_timer = new ElapsedTime();
+    private float feeder_power = 0.85f;
     @Override
     public void init() {
         frontLeft = hardwareMap.get(DcMotor.class, "front_left");
@@ -68,6 +69,7 @@ public class TeleOp extends OpMode {
         backLeft = hardwareMap.get(DcMotor.class, "back_left");
         backRight = hardwareMap.get(DcMotor.class, "back_right");
         spinny = hardwareMap.get(DcMotor.class, "spinny");
+        feeder = hardwareMap.get(DcMotor.class, "feeder");
         theCoolerSpinny = (DcMotorEx)spinny;
         red = hardwareMap.get(LED.class, "red");
         green = hardwareMap.get(LED.class, "green");
@@ -75,8 +77,8 @@ public class TeleOp extends OpMode {
         left_assist = hardwareMap.get(CRServo.class, "left_assist");
         right_assist = hardwareMap.get(CRServo.class, "right_assist");
 
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
         spinny.setDirection(DcMotorSimple.Direction.REVERSE);
         right_assist.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -84,6 +86,8 @@ public class TeleOp extends OpMode {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        feeder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
@@ -91,8 +95,9 @@ public class TeleOp extends OpMode {
         double lsY, lsX, rsX;
         float speed = 1f;
         float assist_power;
-        boolean atspeed = (Math.abs(theCoolerSpinny.getVelocity()) >= 1760);
-        spinny.setPower(0.94*Config.spinny_speed);
+        boolean atspeed = (Math.abs(theCoolerSpinny.getVelocity()) >= 1720);
+        spinny.setPower(0.0f);
+        feeder.setPower(0.0f);
 
         if (gamepad1.right_trigger > 0.1) {
             speed = 0.25f;
@@ -100,6 +105,18 @@ public class TeleOp extends OpMode {
 
         red.enable(!atspeed);
         green.enable(atspeed);
+        if (gamepad1.cross) {
+            feeder.setPower(feeder_power);
+        }
+        if (gamepad1.square) {
+            feeder.setPower(-feeder_power);
+        }
+        if (gamepad1.dpadUpWasPressed()) {
+            feeder_power += 0.05f;
+        }
+        if (gamepad1.dpadDownWasPressed()) {
+            feeder_power -= 0.05f;
+        }
 
         if (gamepad1.rightBumperWasPressed()) {
             assist_timer.reset();
@@ -109,18 +126,22 @@ public class TeleOp extends OpMode {
         } else {
             assist_power = 0.0f;
         }
+        if (gamepad1.left_trigger > 0.1 || gamepad1.left_bumper) {
+            spinny.setPower(Config.spinny_speed);
+        }
         left_assist.setPower(assist_power);
         right_assist.setPower(assist_power);
 
         lsY = -gamepad1.left_stick_y; // W_UP is now positive
         lsX = gamepad1.left_stick_x;
-        rsX = gamepad1.right_stick_x; // un-backwards it
+        rsX = -gamepad1.right_stick_x; // un-backwards it
         frontLeft.setPower((lsY + lsX + rsX)  * speed);
         frontRight.setPower((lsY - lsX - rsX) * speed);
         backLeft.setPower((lsY - lsX + rsX)   * speed);
         backRight.setPower((lsY + lsX - rsX)  * speed);
         // 28 ticks per revolution
         telemetry.addData("spinny tps", theCoolerSpinny.getVelocity());
+        telemetry.addData("feeder", feeder_power);
         telemetry.update();
     }
 }

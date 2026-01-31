@@ -27,8 +27,8 @@ public class BasicAuto extends LinearOpMode {
         Auto.backLeft = hardwareMap.get(DcMotor.class, "back_left");
         Auto.backRight = hardwareMap.get(DcMotor.class, "back_right");
 
-        Auto.frontLeft.setDirection(REVERSE);
-        Auto.backLeft.setDirection(REVERSE);
+        Auto.frontRight.setDirection(REVERSE);
+        Auto.backRight.setDirection(REVERSE);
 
         Auto.frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Auto.backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
