@@ -101,6 +101,9 @@ public class TeleOp extends OpMode {
         if (gamepad1.square) {
             midIntakePower = Config.mimax;
         }
+        if (gamepad1.circle) {
+            midIntakePower = -Config.mimax;
+        }
 
         lsY = -gamepad1.left_stick_y; // W_UP is now positive
         lsX = -gamepad1.left_stick_x;
