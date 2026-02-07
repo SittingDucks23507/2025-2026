@@ -30,11 +30,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.LED;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Config;
 
@@ -91,8 +86,12 @@ public class TeleOp extends OpMode {
         if (gamepad1.right_trigger > 0.1) {
             speed = 0.25f;
         }
+
         if (gamepad1.left_trigger > 0.1) {
             shooterPower = Config.smax;
+        }
+        if (gamepad1.triangle) {
+            shooterPower = -1.0f;
         }
 
         if (gamepad1.cross) {
