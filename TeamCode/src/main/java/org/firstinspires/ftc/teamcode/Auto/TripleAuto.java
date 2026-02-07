@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Config;
 
-@Autonomous(name="triple", group="Autos")
+@Autonomous(name="Auto (Triple)", group="Autos")
 public class TripleAuto extends LinearOpMode {
     DcMotor midIntake, frontIntake;
     DcMotor shooter;
@@ -19,15 +19,17 @@ public class TripleAuto extends LinearOpMode {
         setup();
         waitForStart();
 
-        shooter.setPower(Config.smax * 0.8125f);
-        Auto.movetime(3f, Auto.FORWARD);
+        shooter.setPower(Config.smax);
+        Auto.movetime(3.0f, Auto.FORWARD);
+        safeWait(4.0f);
 
         for (int i = 0; i < 3; i++) {
             midIntake.setPower(Config.mimax);
             frontIntake.setPower(Config.fimax);
-            safeWait(1.5f);
+            safeWait(0.5f);
             midIntake.setPower(0.0f);
             frontIntake.setPower(0.0f);
+            safeWait(4.0f);
         }
         shooter.setPower(0.0f);
         safeWait(1.5f);
