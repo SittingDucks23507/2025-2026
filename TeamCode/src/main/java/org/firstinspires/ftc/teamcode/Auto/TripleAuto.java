@@ -19,7 +19,7 @@ public class TripleAuto extends LinearOpMode {
         setup();
         waitForStart();
 
-        shooter.setPower(Config.smax);
+        shooter.setPower(0.615f);
         Auto.movetime(3.0f, Auto.FORWARD);
         safeWait(4.0f);
 

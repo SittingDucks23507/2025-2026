@@ -30,7 +30,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.LED;
 import org.firstinspires.ftc.teamcode.Config;
 
 /*
@@ -51,8 +52,11 @@ import org.firstinspires.ftc.teamcode.Config;
 public class TeleOp extends OpMode {
     // This declares the four motors needed
     DcMotor frontLeft, frontRight, backLeft, backRight;
-    DcMotor shooter;
     DcMotor midIntake, frontIntake;
+    DcMotor shooter;
+    DcMotorEx theCoolerShooter;
+    LED red, green;
+
     @Override
     public void init() {
         frontLeft = hardwareMap.get(DcMotor.class, "front_left");
@@ -63,6 +67,9 @@ public class TeleOp extends OpMode {
         frontIntake = hardwareMap.get(DcMotor.class, "front_intake");
         midIntake = hardwareMap.get(DcMotor.class, "mid_intake");
         shooter = hardwareMap.get(DcMotor.class, "shooter");
+        theCoolerShooter = (DcMotorEx)shooter;
+        red = hardwareMap.get(LED.class, "red");
+        green = hardwareMap.get(LED.class, "green");
 
         backRight.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
@@ -82,11 +89,14 @@ public class TeleOp extends OpMode {
         float frontIntakePower = 0.0f;
         float midIntakePower = 0.0f;
         float shooterPower = 0.0f;
+        boolean atspeed = Math.abs(theCoolerShooter.getVelocity()) >= 1360;
 
         if (gamepad1.right_trigger > 0.1) {
             speed = 0.25f;
         }
 
+        red.enable(!atspeed);
+        green.enable(atspeed);
         if (gamepad1.left_trigger > 0.1) {
             shooterPower = Config.smax;
         }
@@ -116,9 +126,10 @@ public class TeleOp extends OpMode {
         frontIntake.setPower(frontIntakePower);
         midIntake.setPower(midIntakePower);
 
-        /* telemetry.addData("shooter", shooterPower);
+        telemetry.addData("shooter", shooterPower);
         telemetry.addData("frontIntakePower", frontIntakePower);
         telemetry.addData("midIntakePower", midIntakePower);
-        telemetry.update(); */
+        telemetry.addData("shvel", theCoolerShooter.getVelocity());
+        telemetry.update();
     }
 }
